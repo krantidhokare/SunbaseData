@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Customer</title>
+    <style>
+        /* CSS for styling the add customer form (you can customize this as needed) */
+        div {
+            background-image: linear-gradient(white,grey,rgb(30, 29, 29));
+             width: 500px;
+             border: 4px solid black;
+             padding: 100px;
+             margin: auto;
+            }          
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+
+        #add-customer-form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #add-customer-form input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .btn {
+            background-color: aliceblue;
+            padding: 15px 20px;
+            margin: 10px;
+            cursor: pointer;
+        }
+        .btn:hover {
+         background-color: black;
+         color: white;
+        }
+    </style>
+</head>
+<body>
+    <div>
+    <h1>Add Customer</h1>
+    
+    <!-- Customer Details Form -->
+    <form id="add-customer-form">
+        <input type="text" placeholder="First Name" id="firstName">
+        <input type="text" placeholder="Last Name" id="lastName">
+        <input type="text" placeholder="Address" id="address">
+        <input type="text" placeholder="City" id="city">
+        <input type="text" placeholder="State" id="state">
+        <input type="email" placeholder="Email" id="email">
+        <input type="tel" placeholder="Phone" id="phone">
+        <button type="button" class="btn" onclick="saveCustomer()">Save</button>
+    </form>
+
+    <script>
+        // Load customer data from localStorage on page load
+        loadCustomerData();
+
+        function loadCustomerData() {
+            const customerData = localStorage.customerData ? JSON.parse(localStorage.customerData) : [];
+            const customerIndex = localStorage.customerIndex ? parseInt(localStorage.customerIndex) : -1;
+
+            if (customerIndex >= 0 && customerIndex < customerData.length) {
+                // Populate the form with existing customer data if editing
+                const customer = customerData[customerIndex];
+                document.getElementById('firstName').value = customer.firstName;
+                document.getElementById('lastName').value = customer.lastName;
+                document.getElementById('address').value = customer.address;
+                document.getElementById('city').value = customer.city;
+                document.getElementById('state').value = customer.state;
+                document.getElementById('email').value = customer.email;
+                document.getElementById('phone').value = customer.phone;
+            }
+        }
+
+        function saveCustomer() {
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const address = document.getElementById('address').value;
+            const city = document.getElementById('city').value;
+            const state = document.getElementById('state').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+
+            const customerData = localStorage.customerData ? JSON.parse(localStorage.customerData) : [];
+            const customerIndex = localStorage.customerIndex ? parseInt(localStorage.customerIndex) : -1;
+
+            if (customerIndex >= 0 && customerIndex < customerData.length) {
+                // Update existing customer data if editing
+                customerData[customerIndex] = {
+                    firstName,
+                    lastName,
+                    address,
+                    city,
+                    state,
+                    email,
+                    phone
+                };
+            } else {
+                // Add a new customer if not editing
+                customerData.push({
+                    firstName,
+                    lastName,
+                    address,
+                    city,
+                    state,
+                    email,
+                    phone
+                });
+            }
+
+            localStorage.customerData = JSON.stringify(customerData);
+            localStorage.customerIndex = -1; // Reset the index
+
+            // Go back to the original page
+            window.location.href = "customer_List.html";
+        }
+    </script>
+    </div>
+</body>
+</html>

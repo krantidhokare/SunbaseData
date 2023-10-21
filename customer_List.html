@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Customer List</title>
+    <style>
+        body {
+            background-image: linear-gradient(to right,#fcfdfe,  hsl(600, 15%, 95%));
+        }
+        /* CSS for styling the table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 2px solid black;
+        }
+
+        th, td {
+            padding: 2px 2px;
+            text-align: center;
+        }
+
+        /* CSS for buttons */
+        .btn {
+            background-color: aliceblue;
+            padding: 15px 20px;
+            margin: 10px;
+            cursor: pointer;
+        }
+        .btn:hover {
+         background-color: black;
+         color: white;
+        }
+    </style>
+</head>
+<body align="center">
+    
+    <!-- Add Customer Button -->
+    <button class="btn" onclick="goToAddCustomerPage()">Add Customer</button>
+    <h1>Customer List</h1>
+
+    <!-- Customer Table -->
+    <table>
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Address</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody id="customer-list">
+        </tbody>
+    </table>
+
+    <script>
+        // Load customer data from localStorage on page load
+        loadCustomerData();
+
+        function loadCustomerData() {
+            const customerList = document.getElementById('customer-list');
+            customerList.innerHTML = ''; // Clear the existing data
+
+        
+            // Check if there's customer data in localStorage
+            if (localStorage.customerData) {
+                const customers = JSON.parse(localStorage.customerData);
+
+                customers.forEach((customer, index) => {
+                    const row = customerList.insertRow();
+                    row.innerHTML = `
+                        <td>${customer.firstName}</td>
+                        <td>${customer.lastName}</td>
+                        <td>${customer.address}</td>
+                        <td>${customer.city}</td>
+                        <td>${customer.state}</td>
+                        <td>${customer.email}</td>
+                        <td>${customer.phone}</td>
+                        <td><button class="btn" onclick="editCustomer(${index})">Edit</button></td>
+                        <td><button class="btn" onclick="deleteCustomer(${index})">Delete</button></td>
+                    `;
+                });
+            }
+        }
+
+        function goToAddCustomerPage() {
+            window.location.href = "addCustomer.html";
+        }
+
+        function editCustomer(index) {
+            // Retrieve the customer data from localStorage
+            const customerData = JSON.parse(localStorage.customerData);
+
+            // Get the customer data for the selected index
+            const customer = customerData[index];
+
+            // Store the index in localStorage to indicate that we are editing
+            localStorage.customerIndex = index;
+
+            // Redirect to the "addCustomer.html" page for editing
+            window.location.href = "addCustomer.html";
+        }
+
+        function deleteCustomer(index) {
+            // Retrieve the customer data from localStorage
+            const customerData = JSON.parse(localStorage.customerData);
+
+            // Remove the selected customer from the array
+            customerData.splice(index, 1);
+
+            // Update localStorage with the modified customer data
+            localStorage.customerData = JSON.stringify(customerData);
+
+            // Reload the customer list
+            loadCustomerData();
+        }
+    </script>
+</body>
+</html>
